@@ -16,7 +16,6 @@ import static com.company.MyConstants.*;
  * Class for rooms. A room can contain furniture and light bulbs.
  */
 public class Room {
-    private boolean isValid;
     private String roomName;
     private double roomSpace;
     private double currentUsedSpace;
@@ -32,7 +31,6 @@ public class Room {
         if (roomSpace <= 0 || windowsCount < 0){
             throw new IllegalValueException();
         }
-        this.isValid = false;
         this.currentRoomIlluminance = windowsCount * WINDOW_LUMINOCITY;
         this.currentUsedSpace = 0;
         this.roomName = roomName;
@@ -51,32 +49,19 @@ public class Room {
     }
 
     /**
-     * Method adds new furniture item or light bulb to the room.
+     * Method to add new furniture item or light bulb to the room.
+     * If the way to use this method wasn't so strictly put in guidelines,
+     * we should strongly consider using Factory pattern.
      * @param item any furniture to add to the room.
-     * @throws IlluminanceTooMuchException when lewel of the luminocity exeeds maximum value.
-     * @throws SpaceUsageTooMuchException when space occupied by furniture exeeds 70% of the room available space.
      * @throws UnknownItemException when there is unknown class of furniture.
      */
-    public void add(RoomEquipment item)
-            throws IlluminanceTooMuchException, SpaceUsageTooMuchException, UnknownItemException {
+    public void add(RoomEquipment item) throws UnknownItemException {
         if (item instanceof LightItem){
             roomLights.add((LightItem)item);
             currentRoomIlluminance += ((LightItem) item).getLuminocity();
-            if (checkIlluminance()){
-                isValid = true;
-            } else {
-                isValid = false;
-                throw new IlluminanceTooMuchException();
-            }
         } else if (item instanceof FurnitureItem){
             roomFurnitureItems.add((FurnitureItem)item);
             currentUsedSpace += ((FurnitureItem) item).getOccupiedSpace();
-            if (checkSpace()){
-                isValid = true;
-            } else {
-                isValid = false;
-                throw new SpaceUsageTooMuchException();
-            }
         } else {
             throw new UnknownItemException();
         }
@@ -114,9 +99,17 @@ public class Room {
     /**
      * Method returns currend Room validity
      * @return true if the Room is valid.
+     * @throws IlluminanceTooMuchException when lewel of the luminocity exeeds maximum value.
+     * @throws SpaceUsageTooMuchException when space occupied by furniture exeeds 70% of the room available space.
      */
-    public boolean isValid(){
-        return this.isValid;
+    public boolean validate() throws IlluminanceTooMuchException, SpaceUsageTooMuchException {
+        if (checkIlluminance() && checkSpace()){
+            return true;
+        } else if (!checkSpace()){
+            throw new SpaceUsageTooMuchException(this.roomName);
+        } else {
+            throw new IlluminanceTooMuchException(this.roomName);
+        }
     }
 
     /**
@@ -125,11 +118,11 @@ public class Room {
      */
     public String describeRoom(){
         return roomName + "\n"
-                + formatLights()
-                + formatFurniture();
+                + formatLightsDescription()
+                + formatFurnitureDescription();
     }
 
-    private String formatLights(){
+    private String formatLightsDescription(){
         StringBuilder formattedLights = new StringBuilder("Освещенность = " + currentRoomIlluminance
                 + " (" + windowsCount  + " окна по " + WINDOW_LUMINOCITY + " лк., ");
         if (!roomLights.isEmpty()){
@@ -144,7 +137,7 @@ public class Room {
         return formattedLights.toString();
     }
 
-    private String formatFurniture(){
+    private String formatFurnitureDescription(){
         StringBuilder formattedFurniture = new StringBuilder("Площадь = "
                 + roomSpace + "м^2 (занято " + currentUsedSpace + "м^2, "
                 + "гарантированно свободно " + (roomSpace - currentUsedSpace)

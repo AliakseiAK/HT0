@@ -23,11 +23,6 @@ public class Chair extends RoomEquipment implements FurnitureItem {
     }
 
     @Override
-    public int getOccupiedSpace() {
-        return this.chairSpaceMax;
-    }
-
-    @Override
     public String getName() {
         return this.chairName;
     }
@@ -51,5 +46,10 @@ public class Chair extends RoomEquipment implements FurnitureItem {
                 .append(this.chairSpaceMax)
                 .append("м^2) \n");
         return chairForPrint.toString();
+    }
+
+    @Override
+    public int getOccupiedSpace() {
+        return this.chairSpaceMax;
     }
 }

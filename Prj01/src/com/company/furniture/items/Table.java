@@ -34,7 +34,7 @@ public class Table extends RoomEquipment implements FurnitureItem {
 
     /**
      * Method creates text description of the Table. Alternative solution is to override toString() method.
-     * @return
+     * @return text description for the Table.
      */
     @Override
     public String formatForPrint() {

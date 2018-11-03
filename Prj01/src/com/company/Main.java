@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws SpaceUsageTooMuchException, IlluminanceTooMuchException,
             NoSuchRoomException, UnknownItemException, IllegalNameException, IllegalValueException,
             IllegalFurnitureSizeException {
-        System.out.println("Welcome to Space&Light library!");
+        System.out.println("Welcome to Space&Light library");
         System.out.println("Use addRoom() to add a room to the building.");
         System.out.println("Use building.getRoom(String roomName).add() to add items.");
         System.out.println("Use building.getRoom(String roomName).remoweWindows(int count) to remowe given number of windows.");

@@ -2,7 +2,9 @@ package com.company.entities;
 
 
 import com.company.customexceptions.IllegalNameException;
+import com.company.customexceptions.IlluminanceTooMuchException;
 import com.company.customexceptions.NoSuchRoomException;
+import com.company.customexceptions.SpaceUsageTooMuchException;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -40,7 +42,7 @@ public class Building {
      */
     public Room getRoom(String roomName) throws NoSuchRoomException {
         if (rooms.get(roomName) == null){
-            throw new NoSuchRoomException();
+            throw new NoSuchRoomException(roomName);
         }
         return rooms.get(roomName);
     }
@@ -60,10 +62,10 @@ public class Building {
     /**
      * Method checks if the room furniture and lights are valid.
      */
-    public void validate(){
+    public void validate() throws SpaceUsageTooMuchException, IlluminanceTooMuchException {
         isValid = true;
         for (Map.Entry<String, Room> roomEntry : rooms.entrySet()){
-            if (!roomEntry.getValue().isValid()) {
+            if (!roomEntry.getValue().validate()) {
                 isValid = false;
                 System.out.println("Room " + roomEntry.getKey() + " is invalid \n");
             }

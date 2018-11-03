@@ -1,9 +1,10 @@
 package com.company.furniture.interfaces;
 
 /**
- * Interfase with the methods for lights items.
+ * Interface with the methods for lights items.
  */
 public interface LightItem {
     String getName();
+    String formatForPrint();
     int getLuminocity();
 }

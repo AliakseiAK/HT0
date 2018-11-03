@@ -21,6 +21,11 @@ public class LightBulb extends RoomEquipment implements LightItem {
     }
 
     @Override
+    public String formatForPrint() {
+        return this.lightBulbName + " " + this.bulbLuminocity;
+    }
+
+    @Override
     public int getLuminocity() {
         return this.bulbLuminocity;
     }
